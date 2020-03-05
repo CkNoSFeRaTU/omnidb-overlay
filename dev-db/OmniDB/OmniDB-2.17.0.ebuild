@@ -14,7 +14,7 @@ HOMEPAGE="https://omnidb.org/"
 
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://git.deluge-torrent.org/${PN}"
+	EGIT_REPO_URI="https://github.com/OmniDB/OmniDB"
 else
 	SRC_URI="https://github.com/OmniDB/OmniDB/archive/${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="~amd64 ~arm ~x86"
