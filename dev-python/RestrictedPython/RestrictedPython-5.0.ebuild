@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{6,7} )
 
 inherit distutils-r1
 
-DESCRIPTION="Retrieve and parse whois data for IPv4 and IPv6 addresses"
+DESCRIPTION="RestrictedPython is a defined subset of the Python language which allows to provide a program input into a trusted environment"
 HOMEPAGE="https://github.com/zopefoundation/RestrictedPython"
 SRC_URI="https://github.com/zopefoundation/RestrictedPython/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
