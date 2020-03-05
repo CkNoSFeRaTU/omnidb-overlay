@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE repositories SYSTEM "/dtd/repositories.dtd">
+<repositories xmlns="" version="1.0">
+  <repo quality="experimental" status="unofficial">
+    <name><![CDATA[omnidb-overlay]]></name>
+    <description lang="en"><![CDATA[OmniDB Overlay]]></description>
+    <homepage>https://github.com/CkNoSFeRaTU/omnidb-overlay</homepage>
+    <owner type="person">
+      <email>master.nosferatu@gmail.com</email>
+      <name><![CDATA[Konstantin Kuzov]]></name>
+    </owner>
+    <source type="git">git://github.com/CkNoSFeRaTU/omnidb-overlay.git</source>
+    <feed>http://github.com/CkNoSFeRaTU/omnidb-overlay/commits/master.atom</feed>
+  </repo>
+</repositories>
