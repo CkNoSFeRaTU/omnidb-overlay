@@ -1,0 +1,24 @@
+#!/sbin/openrc-run
+
+COMMAND="/opt/OmniDB/OmniDB/omnidb-server.py"
+PIDFILE="/var/run/omnidb-server.pid"
+
+depend() {
+	use net dns
+	after precursor
+}
+
+start() {
+	ebegin "Starting OmniDB server"
+	start-stop-daemon --start --quiet --background --make-pidfile --pidfile "${PIDFILE}" \
+			  --user "${OMNIDB_USER}" --group "${OMNIDB_GROUP}" \
+			  --exec /usr/bin/python3 "${COMMAND}" -- ${OMNIDB_OPTIONS}
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping OmniDB server"
+	start-stop-daemon --stop --pidfile "${PIDFILE}"
+	eend $?
+}
+

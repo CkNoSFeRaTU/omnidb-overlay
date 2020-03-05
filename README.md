@@ -1,0 +1,2 @@
+# OmniDB Overlay for Gentoo
+

@@ -1,0 +1,10 @@
+diff -urN a/omnidb_plugin/Makefile b/omnidb_plugin/Makefile
+--- a/omnidb_plugin/Makefile	2019-12-05 18:30:40.000000000 +0300
++++ b/omnidb_plugin/Makefile	2020-03-04 15:54:58.186252863 +0300
+@@ -4,6 +4,4 @@
+ 
+ PG_CONFIG = pg_config
+ PGXS := $(shell $(PG_CONFIG) --pgxs)
+-override CPPFLAGS := $(CPPFLAGS) -I$(shell $(PG_CONFIG) --includedir)
+-override LDFLAGS := $(LDFLAGS) -lpq
+ include $(PGXS)

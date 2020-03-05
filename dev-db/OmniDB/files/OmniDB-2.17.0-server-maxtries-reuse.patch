@@ -1,0 +1,89 @@
+diff -urN a/OmniDB/omnidb-server.py b/OmniDB/omnidb-server.py
+--- a/OmniDB/omnidb-server.py	2019-12-05 18:30:40.000000000 +0300
++++ b/OmniDB/omnidb-server.py	2020-03-04 16:34:34.202359221 +0300
+@@ -48,6 +48,10 @@
+                   default='', type=str,
+                   help="path to access the application, other than /")
+ 
++parser.add_option("-m", "--maxtries", dest="maxtries",
++                  default=20, type=int,
++                  help="maximum port binding tries")
++
+ (options, args) = parser.parse_args()
+ 
+ #Generate random token if in app mode
+@@ -122,6 +126,14 @@
+     except:
+         OmniDB.custom_settings.PATH = ''
+ 
++if options.maxtries!=None:
++    maxtries = options.maxtries
++else:
++    try:
++        maxtries = Config.getint('webserver', 'maxtries')
++    except:
++        maxtries = 20
++
+ try:
+     is_ssl = Config.getboolean('webserver', 'is_ssl')
+ except:
+@@ -219,6 +231,7 @@
+ def check_port(port):
+     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+     try:
++        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+         s.bind(("127.0.0.1", port))
+     except socket.error as e:
+         return False
+@@ -253,14 +266,13 @@
+         logger.info('''Starting OmniDB server...''')
+         print('''Checking port availability...''',flush=True)
+         logger.info('''Checking port availability...''')
+-
+-        while not check_port(port) or num_attempts >= 20:
++        while not check_port(port) and num_attempts < maxtries:
+             print("Port {0} is busy, trying another port...".format(port),flush=True)
+             logger.info("Port {0} is busy, trying another port...".format(port))
+             port = random.randint(1025,32676)
+             num_attempts = num_attempts + 1
+ 
+-        if num_attempts < 20:
++        if num_attempts < maxtries:
+ 
+             v_cherrypy_config = {
+                 'server.socket_host': parameters['listening_address'],
+@@ -305,8 +317,8 @@
+             cherrypy.engine.block()
+             cherrypy.engine.exit()
+         else:
+-            print('Tried 20 different ports without success, closing...',flush=True)
+-            logger.info('Tried 20 different ports without success, closing...')
++            print('Tried {0} different ports without success, closing...'.format(num_attempts),flush=True)
++            logger.info('Tried {0} different ports without success, closing...'.format(num_attempts))
+ 
+ if __name__ == "__main__":
+ 
+@@ -319,13 +331,13 @@
+     print('''Checking port availability...''',flush=True)
+     logger.info('''Checking port availability...''')
+ 
+-    while not check_port(port) or num_attempts_port >= 20:
++    while not check_port(port) and num_attempts_port < maxtries:
+         print("Port {0} is busy, trying another port...".format(port),flush=True)
+         logger.info("Port {0} is busy, trying another port...".format(port))
+         port = random.randint(1025,32676)
+         num_attempts_port = num_attempts_port + 1
+ 
+-    if num_attempts_port < 20:
++    if num_attempts_port < maxtries:
+         OmniDB.settings.OMNIDB_WEBSOCKET_PORT          = port
+         if ews_port==None:
+             OmniDB.settings.OMNIDB_EXTERNAL_WEBSOCKET_PORT = port
+@@ -358,5 +370,5 @@
+ 
+ 
+     else:
+-        print('Tried 20 different ports without success, closing...',flush=True)
+-        logger.info('Tried 20 different ports without success, closing...')
++        print('Tried {0} different ports without success, closing...'.format(num_attempts_port),flush=True)
++        logger.info('Tried {0} different ports without success, closing...'.format(num_attempts_port))
